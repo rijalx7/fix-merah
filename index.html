@@ -27,6 +27,44 @@
       overflow: hidden;
     }
 
+    /* --- MENU GARIS 3 --- */
+    .menu-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      font-size: 28px;
+      cursor: pointer;
+      color: white;
+      z-index: 10;
+      background: rgba(0,0,0,0.4);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .menu-box {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 200px;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      padding-top: 60px;
+      transition: .3s;
+      z-index: 9;
+    }
+
+    .menu-box a {
+      display: block;
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .menu-box a:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
     .box {
       background: rgba(0,0,0,0.55);
       padding: 25px;
@@ -35,6 +73,59 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
       color: #fff;
       text-align: center;
+    }
+
+    .title {
+      color: rgba(255,255,255,0.85);
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow:
+        -1px -1px 0 rgba(0,0,0,0.5),
+         1px -1px 0 rgba(0,0,0,0.5),
+        -1px  1px 0 rgba(0,0,0,0.5),
+         1px  1px 0 rgba(0,0,0,0.5);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      margin-top: 10px;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+
+    #status {
+      margin-top: 15px;
+      color: #ff4444;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .logout {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.85);
+      color: #000;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      z      text-align: center;
     }
 
     .title {
