@@ -15,6 +15,7 @@
       background-position: center;
       background-repeat: no-repeat;
       background-image: url('https://files.catbox.moe/ocsxya.jpg');
+      overflow: hidden;
     }
 
     .box { 
@@ -24,6 +25,8 @@
       border-radius:10px; 
       box-shadow:0 0 15px rgba(0,0,0,0.5);
       color: #fff;
+      position: relative;
+      z-index: 10; /* pastikan box tetap di atas background */
     }
 
     .title {
@@ -70,13 +73,15 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      z-index: 9999;
+      z-index: 999; /* cukup tinggi tapi tidak mengganggu sebelum login */
       opacity: 0;
+      pointer-events: none; /* mencegah overlay mengganggu klik sebelum login */
       transition: opacity 2s ease;
     }
 
     .videoOverlay.show {
       opacity: 1;
+      pointer-events: auto; /* aktifkan saat video muncul */
     }
 
     .videoOverlay.hide {
@@ -93,15 +98,21 @@
 </head>
 <body>
 
-<div class="box">
+<div class="box" id="loginBox">
   <h2 class="title">Masukan user & key untuk Mengakses</h2>
 
   <input id="user" type="text" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
 
   <button onclick="login()">LOGIN</button>
-
   <p id="msg"></p>
+</div>
+
+<!-- Video overlay tetap ada di DOM tapi tersembunyi -->
+<div class="videoOverlay" id="videoOverlay">
+  <video id="loginVideo" autoplay muted playsinline>
+    <source src="https://files.catbox.moe/qjlti5.mp4" type="video/mp4">
+  </video>
 </div>
 
 <script>
@@ -128,37 +139,23 @@ async function login() {
     }
 
     if (found) {
-      document.querySelector(".box").style.display = "none";
+      // sembunyikan login box
+      document.getElementById("loginBox").style.display = "none";
 
-      const overlay = document.createElement("div");
-      overlay.className = "videoOverlay";
+      // tampilkan video overlay
+      const overlay = document.getElementById("videoOverlay");
+      overlay.classList.add("show");
 
-      const video = document.createElement("video");
-      video.autoplay = true;
-      video.muted = true;
-      video.playsInline = true;
-
-      const source = document.createElement("source");
-      source.src = "https://files.catbox.moe/qjlti5.mp4"; // video portrait
-      source.type = "video/mp4";
-
-      video.appendChild(source);
-      overlay.appendChild(video);
-      document.body.appendChild(overlay);
-
-      // fade in
-      setTimeout(() => overlay.classList.add("show"), 50);
+      const video = document.getElementById("loginVideo");
 
       video.onended = () => {
         overlay.classList.remove("show");
         overlay.classList.add("hide");
 
-        // tunggu 2 detik fade out selesai, lalu redirect
         setTimeout(() => {
           localStorage.setItem("logged","yes");
-          // redirect ke index.html dengan animasi masuk
           window.location.href = "index.html?fadein=1";
-        }, 2000);
+        }, 2000); // tunggu fade out
       };
 
     } else {
