@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Fix Merah Web</title>
 
   <script>
@@ -16,15 +16,20 @@
       margin: 0;
       padding: 0;
       height: 100vh;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: Arial;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       background-image: url("https://files.catbox.moe/i9t5rg.jpg");
       overflow: hidden;
+    }
+
+    /* Container agar box tetap di tengah */
+    .center-wrapper {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     /* HAMBURGER BUTTON */
@@ -34,7 +39,7 @@
       left: 15px;
       font-size: 28px;
       color: white;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       padding: 8px 12px;
       border-radius: 6px;
       cursor: pointer;
@@ -48,9 +53,10 @@
       left: -230px;
       width: 230px;
       height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       padding-top: 60px;
       transition: 0.3s;
+      z-index: 900;
     }
 
     .sidebar a {
@@ -58,13 +64,14 @@
       padding: 12px;
       color: white;
       text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 1px solid rgba(255,255,255,0.25);
     }
 
     .sidebar a:hover {
       background: rgba(255,255,255,0.2);
     }
 
+    /* BOX UTAMA */
     .box {
       background: rgba(0,0,0,0.55);
       padding: 25px;
@@ -76,17 +83,17 @@
     }
 
     .title {
-      color: rgba(255,255,255,0.85);
       font-size: 22px;
       font-weight: bold;
       margin-bottom: 20px;
+      color: rgba(255,255,255,0.85);
     }
 
     input {
       width: 100%;
       padding: 10px;
-      border: none;
       margin-top: 10px;
+      border: none;
       border-radius: 5px;
       outline: none;
     }
@@ -94,12 +101,12 @@
     button {
       width: 100%;
       padding: 12px;
-      background: #ffffff;
+      background: #fff;
       color: #000;
       font-weight: bold;
       border: none;
+      margin-top: 15px;
       cursor: pointer;
-      margin-top: 20px;
       border-radius: 5px;
     }
 
@@ -112,25 +119,28 @@
 
 <body>
 
-<!-- GARIS TIGA -->
+<!-- tombol garis tiga -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<!-- SIDEBAR -->
+<!-- sidebar -->
 <div class="sidebar" id="sidebar">
   <a href="https://t.me/username" target="_blank">Telegram</a>
-  <a href="https://wa.me/62xxxxxxx" target="_blank">Support</a>
+  <a href="https://wa.me/62xxxx" target="_blank">Support</a>
   <a href="#" onclick="logout()">Logout</a>
 </div>
 
-<div class="box">
-  <div class="title">Fix Merah V2.0</div>
+<!-- wrapper untuk memastikan box 100% di tengah -->
+<div class="center-wrapper">
+  <div class="box">
+    <div class="title">Fix Merah V2.0</div>
 
-  <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
-  <input id="number" type="text" placeholder="Example +79xxx" required />
+    <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
+    <input id="number" type="text" placeholder="Example +79xxx" />
 
-  <button onclick="send()">Fix</button>
+    <button onclick="send()">Fix</button>
 
-  <p id="status"></p>
+    <p id="status"></p>
+  </div>
 </div>
 
 <script>
@@ -149,7 +159,7 @@ async function send() {
   const status = document.getElementById("status");
 
   if (!number) {
-    status.innerText = "Nomor tidak boleh kosong";
+    status.innerText = "Nomor tidak boleh kosong!";
     return;
   }
 
@@ -163,163 +173,9 @@ async function send() {
     });
 
     const data = await res.json();
-    status.innerText = data.message || "Selesai";
+    status.innerText = data.message || "Selesai!";
   } catch (err) {
-    status.innerText = "Gagal: " + err.message;
-  }
-}
-</script>
-
-</body>
-</html>      color: white;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      z-index: 1000;
-    }
-
-    /* MENU SIDEBAR */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -230px;
-      width: 230px;
-      height: 100%;
-      background: rgba(0,0,0,0.8);
-      padding-top: 60px;
-      transition: 0.3s;
-    }
-
-    .sidebar a {
-      display: block;
-      padding: 12px;
-      color: white;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .sidebar a:hover {
-      background: rgba(255,255,255,0.2);
-    }
-
-    /* BOX FIX MERAH */
-    .box {
-      background: rgba(0,0,0,0.55);
-      padding: 25px;
-      width: 330px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      color: #fff;
-      text-align: center;
-    }
-
-    .title {
-      color: rgba(255,255,255,0.85);
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      margin-top: 10px;
-      border-radius: 5px;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #ffffff;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      margin-top: 20px;
-      border-radius: 5px;
-    }
-
-    #status {
-      margin-top: 15px;
-      color: #ff4444;
-    }
-
-    .logout {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: rgba(255,255,255,0.85);
-      color: #000;
-      border: none;
-      padding: 7px 12px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-  </style>
-</head>
-
-<body>
-
-<!-- HAMBURGER -->
-<div class="menu-btn" onclick="toggleMenu()">☰</div>
-
-<!-- SIDEBAR -->
-<div class="sidebar" id="sidebar">
-  <a href="https://t.me/username" target="_blank">Telegram</a>
-  <a href="https://wa.me/62xxxxxx" target="_blank">Support</a>
-  <a href="#" onclick="logout()">Logout</a>
-</div>
-
-<button class="logout" onclick="logout()">Logout</button>
-
-<div class="box">
-  <div class="title">Fix Merah V2.0</div>
-
-  <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
-  <input id="number" type="text" placeholder="Example +79xxx" required />
-
-  <button onclick="send()">Fix</button>
-
-  <p id="status"></p>
-</div>
-
-<script>
-function toggleMenu() {
-  const bar = document.getElementById("sidebar");
-  bar.style.left = bar.style.left === "0px" ? "-230px" : "0px";
-}
-
-function logout() {
-  localStorage.removeItem("logged");
-  window.location.href = "login.html";
-}
-
-async function send() {
-  const number = document.getElementById("number").value.trim();
-  const status = document.getElementById("status");
-
-  if (!number) {
-    status.innerText = "Nomor tidak boleh kosong";
-    return;
-  }
-
-  status.innerText = "Mengirim...";
-
-  try {
-    const res = await fetch("/api/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ number })
-    });
-
-    const data = await res.json();
-    status.innerText = data.message || "Selesai";
-  } catch (err) {
-    status.innerText = "Gagal: " + err.message;
+    status.innerText = "Error: " + err.message;
   }
 }
 </script>
