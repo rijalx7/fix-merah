@@ -3,8 +3,6 @@
 <head>
   <title>Login</title>
   <style>
-
-    /* Background foto fullscreen */
     body {
       margin: 0;
       padding: 0;
@@ -63,19 +61,19 @@
 
     #msg { margin-top:10px; color:#ff0000; text-align:center; }
 
-    /* overlay fullscreen video */
-    #videoOverlay {
-      display:none;
+    /* style overlay video nanti */
+    .videoOverlay {
       position: fixed;
       top:0; left:0;
       width:100vw; height:100vh;
       background:black;
+      display:flex;
       justify-content:center;
       align-items:center;
       z-index: 9999;
     }
 
-    #videoOverlay video {
+    .videoOverlay video {
       width:80%;
       height:auto;
       border-radius:10px;
@@ -86,24 +84,15 @@
 <body>
 
 <div class="box">
-
   <h2 class="title">Masukan user & key untuk Mengakses</h2>
-
   <input id="user" type="text" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
-
   <button onclick="login()">LOGIN</button>
-
   <p id="msg"></p>
 </div>
 
-<!-- overlay video animasi -->
-<div id="videoOverlay"></div>
-
-<!-- SCRIPT LOGIN DITARUH PALING BAWAH -->
 <script>
 async function login() {
-
   let u = document.getElementById("user").value.trim();
   let p = document.getElementById("pass").value.trim();
   let msg = document.getElementById("msg");
@@ -118,41 +107,39 @@ async function login() {
 
     const text = await res.text();
     const lines = text.split("\n").map(l => l.trim()).filter(l => l);
-
     let found = false;
 
     for (let line of lines) {
-
       const parts = line.split(":");
       if (parts.length !== 2) continue;
-
-      const user = parts[0].trim();
-      const key  = parts[1].trim();
-
-      if (u === user && p === key) {
+      if (u === parts[0].trim() && p === parts[1].trim()) {
         found = true;
         break;
       }
     }
 
     if (found) {
-      // tampilkan video animasi overlay
-      const overlay = document.getElementById("videoOverlay");
-      overlay.style.display = "flex";
+      // buat overlay video hanya sekarang
+      const overlay = document.createElement("div");
+      overlay.className = "videoOverlay";
 
       const video = document.createElement("video");
       video.autoplay = true;
 
       const source = document.createElement("source");
-      source.src = "https://files.catbox.moe/qjlti5.mp4"; // ganti dengan URL video kamu
+      source.src = "https://files.catbox.moe/qjlti5.mp4"; // ganti URL video kamu
       source.type = "video/mp4";
 
       video.appendChild(source);
       overlay.appendChild(video);
+      document.body.appendChild(overlay);
 
-      // setelah video selesai, redirect ke index.html
+      // hide box login
+      document.querySelector(".box").style.display = "none";
+
+      // redirect setelah video selesai
       video.onended = () => {
-        localStorage.setItem("logged", "yes");
+        localStorage.setItem("logged","yes");
         window.location.href = "index.html";
       };
 
@@ -167,4 +154,4 @@ async function login() {
 </script>
 
 </body>
-  </html>
+</html>
