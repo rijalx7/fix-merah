@@ -86,10 +86,9 @@
     /* video portrait 9:16 */
     .videoOverlay video {
       width: auto;
-      height: 90vh; /* tinggi 90% layar */
+      height: 90vh;
       object-fit: contain;
     }
-
   </style>
 </head>
 <body>
@@ -140,21 +139,25 @@ async function login() {
       video.playsInline = true;
 
       const source = document.createElement("source");
-      source.src = "https://files.catbox.moe/qjlti5.mp4"; // ganti dengan video portrait kamu
+      source.src = "https://files.catbox.moe/qjlti5.mp4"; // video portrait
       source.type = "video/mp4";
 
       video.appendChild(source);
       overlay.appendChild(video);
       document.body.appendChild(overlay);
 
+      // fade in
       setTimeout(() => overlay.classList.add("show"), 50);
 
       video.onended = () => {
         overlay.classList.remove("show");
         overlay.classList.add("hide");
+
+        // tunggu 2 detik fade out selesai, lalu redirect
         setTimeout(() => {
           localStorage.setItem("logged","yes");
-          window.location.href = "index.html";
+          // redirect ke index.html dengan animasi masuk
+          window.location.href = "index.html?fadein=1";
         }, 2000);
       };
 
@@ -169,4 +172,4 @@ async function login() {
 </script>
 
 </body>
-</html>
+  </html>
