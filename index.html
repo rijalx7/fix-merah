@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Fix Merah Web</title>
 
+  <!-- Cek login -->
   <script>
     if (localStorage.getItem("logged") !== "yes") {
       window.location.href = "login.html";
@@ -27,44 +28,45 @@
       overflow: hidden;
     }
 
-    /* --- MENU GARIS 3 --- */
+    /* HAMBURGER */
     .menu-btn {
       position: fixed;
       top: 15px;
       left: 15px;
       font-size: 28px;
-      cursor: pointer;
       color: white;
-      z-index: 10;
       background: rgba(0,0,0,0.4);
-      padding: 6px 12px;
+      padding: 8px 12px;
       border-radius: 6px;
+      cursor: pointer;
+      z-index: 1000;
     }
 
-    .menu-box {
+    /* MENU SIDEBAR */
+    .sidebar {
       position: fixed;
       top: 0;
-      left: -220px;
-      width: 200px;
-      height: 100vh;
+      left: -230px;
+      width: 230px;
+      height: 100%;
       background: rgba(0,0,0,0.8);
       padding-top: 60px;
-      transition: .3s;
-      z-index: 9;
+      transition: 0.3s;
     }
 
-    .menu-box a {
+    .sidebar a {
       display: block;
-      padding: 12px 20px;
+      padding: 12px;
       color: white;
       text-decoration: none;
       border-bottom: 1px solid rgba(255,255,255,0.2);
     }
 
-    .menu-box a:hover {
-      background: rgba(255,255,255,0.1);
+    .sidebar a:hover {
+      background: rgba(255,255,255,0.2);
     }
 
+    /* BOX FIX MERAH */
     .box {
       background: rgba(0,0,0,0.55);
       padding: 25px;
@@ -80,11 +82,6 @@
       font-size: 22px;
       font-weight: bold;
       margin-bottom: 20px;
-      text-shadow:
-        -1px -1px 0 rgba(0,0,0,0.5),
-         1px -1px 0 rgba(0,0,0,0.5),
-        -1px  1px 0 rgba(0,0,0,0.5),
-         1px  1px 0 rgba(0,0,0,0.5);
     }
 
     input {
@@ -111,60 +108,6 @@
     #status {
       margin-top: 15px;
       color: #ff4444;
-      text-shadow: 0 0 4px #000;
-    }
-
-    .logout {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: rgba(255,255,255,0.85);
-      color: #000;
-      border: none;
-      padding: 7px 12px;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      z      text-align: center;
-    }
-
-    .title {
-      color: rgba(255,255,255,0.85);
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-shadow:
-        -1px -1px 0 rgba(0,0,0,0.5),
-         1px -1px 0 rgba(0,0,0,0.5),
-        -1px  1px 0 rgba(0,0,0,0.5),
-         1px  1px 0 rgba(0,0,0,0.5);
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      margin-top: 10px;
-      border-radius: 5px;
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #ffffff;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      margin-top: 20px;
-      border-radius: 5px;
-    }
-
-    #status {
-      margin-top: 15px;
-      color: #ff4444;
-      text-shadow: 0 0 4px #000;
     }
 
     .logout {
@@ -184,6 +127,16 @@
 
 <body>
 
+<!-- HAMBURGER -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <a href="https://t.me/username" target="_blank">Telegram</a>
+  <a href="https://wa.me/62xxxxxx" target="_blank">Support</a>
+  <a href="#" onclick="logout()">Logout</a>
+</div>
+
 <button class="logout" onclick="logout()">Logout</button>
 
 <div class="box">
@@ -198,6 +151,11 @@
 </div>
 
 <script>
+function toggleMenu() {
+  const bar = document.getElementById("sidebar");
+  bar.style.left = bar.style.left === "0px" ? "-230px" : "0px";
+}
+
 function logout() {
   localStorage.removeItem("logged");
   window.location.href = "login.html";
