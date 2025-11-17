@@ -16,6 +16,7 @@
       overflow: hidden;
     }
 
+    /* Login Box */
     .box {
       background: rgba(0,0,0,0.6);
       padding: 30px;
@@ -23,8 +24,8 @@
       color: #fff;
       text-align: center;
       width: 300px;
-      z-index: 10;
       position: relative;
+      z-index: 10;
     }
 
     input {
@@ -62,6 +63,7 @@
       height:100%;
       background:black;
       display:flex;
+      flex-direction: column;
       justify-content:center;
       align-items:center;
       z-index: 9999;
@@ -73,15 +75,35 @@
     #animation.hide { opacity:0; }
 
     #animation video {
-      max-width: 40%;    /* ukuran video portrait cinematic */
+      max-width: 40%;
       max-height: 90vh;
       object-fit: contain;
       border-radius: 10px;
+      box-shadow:0 0 30px rgba(0,0,0,0.7);
     }
+
+    /* Progress bar */
+    .progressContainer {
+      width: 40%; /* sama dengan video max-width */
+      height: 6px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 3px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .progressBar {
+      width: 0%;
+      height: 100%;
+      background: #00ffea;
+      transition: width 0.1s linear;
+    }
+
   </style>
 </head>
 <body>
 
+<!-- Login Box -->
 <div class="box" id="loginBox">
   <h2>Masukan user & key</h2>
   <input type="text" id="username" placeholder="Username">
@@ -92,9 +114,12 @@
 
 <!-- Video Overlay -->
 <div id="animation">
-  <video id="loginVideo" autoplay>
+  <video id="loginVideo" autoplay muted playsinline>
     <source src="https://files.catbox.moe/0629kh.mp4" type="video/mp4">
   </video>
+  <div class="progressContainer">
+    <div class="progressBar" id="progressBar"></div>
+  </div>
 </div>
 
 <script>
@@ -103,17 +128,24 @@ function login() {
   const pass = document.getElementById("password").value.trim();
   const error = document.getElementById("error");
 
-  // validasi sederhana
   if(user === "admin" && pass === "123") {
+    // sembunyikan login form
     document.getElementById("loginBox").style.display = "none";
 
     const anim = document.getElementById("animation");
     anim.style.display = "flex";
 
-    // fade in
+    // fade in overlay
     setTimeout(()=> anim.classList.add("show"), 50);
 
     const video = document.getElementById("loginVideo");
+    const progressBar = document.getElementById("progressBar");
+
+    // update progress bar setiap frame
+    video.addEventListener("timeupdate", ()=>{
+      const percent = (video.currentTime / video.duration) * 100;
+      progressBar.style.width = percent + "%";
+    });
 
     // setelah video selesai
     video.onended = ()=>{
