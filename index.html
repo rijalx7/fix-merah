@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Fix Merah Web</title>
+
+  <script>
+    if (localStorage.getItem("logged") !== "yes") {
+      window.location.href = "login.html";
+    }
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-image: url("https://files.catbox.moe/i9t5rg.jpg");
+      overflow: hidden;
+    }
+
+    .box {
+      background: rgba(0,0,0,0.55);
+      padding: 25px;
+      width: 330px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      color: #fff;
+      text-align: center;
+    }
+
+    .title {
+      color: rgba(255,255,255,0.85);
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow:
+        -1px -1px 0 rgba(0,0,0,0.5),
+         1px -1px 0 rgba(0,0,0,0.5),
+        -1px  1px 0 rgba(0,0,0,0.5),
+         1px  1px 0 rgba(0,0,0,0.5);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      margin-top: 10px;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+
+    #status {
+      margin-top: 15px;
+      color: #ff4444;
+      text-shadow: 0 0 4px #000;
+    }
+
+    .logout {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.85);
+      color: #000;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+<div class="box">
+  <div class="title">Fix Merah V2.0</div>
+
+  <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
+  <input id="number" type="text" placeholder="Example +79xxx" required />
+
+  <button onclick="send()">Fix</button>
+
+  <p id="status"></p>
+</div>
+
+<script>
+function logout() {
+  localStorage.removeItem("logged");
+  window.location.href = "login.html";
+}
+
+async function send() {
+  const number = document.getElementById("number").value.trim();
+  const status = document.getElementById("status");
+
+  if (!number) {
+    status.innerText = "Nomor tidak boleh kosong";
+    return;
+  }
+
+  status.innerText = "Mengirim...";
+
+  try {
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ number })
+    });
+
+    const data = await res.json();
+    status.innerText = data.message || "Selesai";
+  } catch (err) {
+    status.innerText = "Gagal: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>
