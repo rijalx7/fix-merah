@@ -4,7 +4,6 @@
   <title>Login</title>
   <style>
 
-    /* Background foto fullscreen */
     body {
       margin: 0;
       padding: 0;
@@ -22,22 +21,17 @@
     .box { 
       width: 300px; 
       padding: 25px; 
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.6);
       border-radius:10px; 
-      box-shadow:0 0 15px rgba(0,0,0,0.5);
+      box-shadow:0 0 15px rgba(0,0,0,0.7);
       color: #fff;
     }
 
     .title {
       text-align:center;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.9);
       font-weight:bold;
       font-size: 20px;
-      text-shadow:
-        -1px -1px 0 rgba(0,0,0,0.5),
-         1px -1px 0 rgba(0,0,0,0.5),
-        -1px  1px 0 rgba(0,0,0,0.5),
-         1px  1px 0 rgba(0,0,0,0.5);
     }
 
     input { 
@@ -68,17 +62,16 @@
 
 <div class="box">
 
-  <h2 class="title">Masukan user & key untuk Mengakses</h2>
+  <h2 class="title">Masukan Username & Key</h2>
 
   <input id="user" type="text" placeholder="Username">
-  <input id="pass" type="password" placeholder="Password">
+  <input id="pass" type="password" placeholder="Key">
 
   <button onclick="login()">LOGIN</button>
 
   <p id="msg"></p>
 </div>
 
-<!-- SCRIPT LOGIN DITARUH PALING BAWAH -->
 <script>
 async function login() {
 
@@ -122,59 +115,6 @@ async function login() {
 
   } catch (e) {
     msg.innerHTML = "Terjadi error saat membaca file!";
-  }
-}
-</script>
-
-</body>
-</html>
-      outline: none;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 20px;
-      background: white;
-      color: black;
-      font-weight: bold;
-      border-radius: 5px;
-      border: none;
-      cursor: pointer;
-    }
-
-    #status {
-      margin-top: 10px;
-      color: red;
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="box">
-  <h2>Login</h2>
-  <input id="key" type="password" placeholder="Masukkan Key">
-  <button onclick="login()">Masuk</button>
-  <p id="status"></p>
-</div>
-
-<script>
-function login() {
-  const key = document.getElementById("key").value;
-  const status = document.getElementById("status");
-
-  if (key === "") {
-    status.innerText = "Key tidak boleh kosong!";
-    return;
-  }
-
-  // GANTI DENGAN KEY PUNYA KAMU
-  if (key === "admin123") {
-    localStorage.setItem("logged", "yes");
-    window.location.href = "fix.html"; // halaman fix kamu
-  } else {
-    status.innerText = "Key salah!";
   }
 }
 </script>
