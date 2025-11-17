@@ -1,219 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Fix Merah Web Cinematic + Progress Bar</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fix Merah Web</title>
+
+  <script>
+    if (localStorage.getItem("logged") !== "yes") {
+      window.location.href = "login.html";
+    }
+  </script>
+
   <style>
     body {
       margin: 0;
       padding: 0;
+      height: 100vh;
       font-family: Arial;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-image: url("https://files.catbox.moe/i9t5rg.jpg");
+      overflow: hidden;
+    }
+
+    /* Container agar box tetap di tengah */
+    .center-wrapper {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
 
-    /* Login Box */
-    .box { 
-      width: 300px; 
-      padding: 25px; 
-      background: rgba(0,0,0,0.5);
-      border-radius:10px; 
-      box-shadow:0 0 15px rgba(0,0,0,0.5);
+    /* HAMBURGER BUTTON */
+    .menu-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      font-size: 28px;
+      color: white;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -230px;
+      width: 230px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      padding-top: 60px;
+      transition: 0.3s;
+      z-index: 900;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .sidebar a:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* BOX UTAMA */
+    .box {
+      background: rgba(0,0,0,0.55);
+      padding: 25px;
+      width: 330px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
       color: #fff;
       text-align: center;
-      z-index: 10;
-      position: relative;
     }
 
     .title {
-      font-weight:bold;
-      font-size: 20px;
-      color: rgba(255,255,255,0.9);
-      margin-bottom: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: rgba(255,255,255,0.85);
     }
 
-    input { 
-      width:100%; 
-      padding:10px; 
-      margin-top:10px; 
-      border:none; 
-      outline:none; 
-      border-radius:5px;
-    }
-
-    button { 
-      width:100%; 
-      padding:10px; 
-      margin-top:20px; 
-      border:none; 
-      background:#fff;
-      color:#000; 
-      font-weight:bold; 
-      cursor:pointer; 
-      border-radius:5px;
-    }
-
-    #msg { margin-top:10px; color:#ff4444; text-align:center; }
-
-    /* Video Overlay cinematic */
-    .videoOverlay {
-      position: fixed;
-      top:0; left:0;
-      width:100vw;
-      height:100vh;
-      background: url('https://files.catbox.moe/ocsxya.jpg') center center/cover no-repeat;
-      display:flex;
-      flex-direction: column;
-      justify-content:center;
-      align-items:center;
-      z-index: 9999;
-      opacity: 0;
-      transition: opacity 2s ease;
-      backdrop-filter: blur(15px);
-    }
-
-    .videoOverlay.show { opacity:1; }
-    .videoOverlay.hide { opacity:0; }
-
-    .videoOverlay video {
-      width: auto;
-      height: 90vh;
-      object-fit: contain;
-      border-radius:10px;
-      box-shadow:0 0 30px rgba(0,0,0,0.7);
-      z-index: 10;
-    }
-
-    /* progress bar */
-    .progressContainer {
-      width: 60%;
-      height: 6px;
-      background: rgba(255,255,255,0.3);
-      border-radius: 3px;
-      margin-top: 15px;
-      overflow: hidden;
-    }
-
-    .progressBar {
-      width: 0%;
-      height: 100%;
-      background: #00ffea;
-      transition: width 0.1s linear;
-    }
-
-    /* Main content */
-    .content {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 1.5s ease;
-      text-align: center;
-      color: white;
-      position: absolute;
+    input {
       width: 100%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) translateY(20px);
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
     }
 
-    .content.show {
-      opacity: 1;
-      transform: translate(-50%, -50%) translateY(0);
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #fff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      margin-top: 15px;
+      cursor: pointer;
+      border-radius: 5px;
     }
 
+    #status {
+      margin-top: 15px;
+      color: #ff4444;
+    }
   </style>
 </head>
+
 <body>
 
-<!-- Login Box -->
-<div class="box" id="loginBox">
-  <h2 class="title">Masukan user & key</h2>
-  <input type="text" id="user" placeholder="Username">
-  <input type="password" id="pass" placeholder="Key">
-  <button onclick="login()">LOGIN</button>
-  <p id="msg"></p>
+<!-- tombol garis tiga -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<!-- sidebar -->
+<div class="sidebar" id="sidebar">
+  <a href="https://t.me/rijaljr" target="_blank">Developer</a>
+  <a href="https://t.me/m3xsicos" target="_blank">Channel Support</a>
+  <a href="#" onclick="logout()">Logout</a>
 </div>
 
-<!-- Main Content -->
-<div class="content" id="mainContent">
-  <h1>Selamat Datang!</h1>
-  <p>Konten utama muncul setelah animasi cinematic.</p>
+<!-- wrapper untuk memastikan box 100% di tengah -->
+<div class="center-wrapper">
+  <div class="box">
+    <div class="title">Fix Merah V2.0</div>
+
+    <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
+    <input id="number" type="text" placeholder="Example 62xxxx" />
+
+    <button onclick="send()">Fix</button>
+
+    <p id="status"></p>
+  </div>
 </div>
 
 <script>
-async function login() {
-  const u = document.getElementById("user").value.trim();
-  const p = document.getElementById("pass").value.trim();
-  const msg = document.getElementById("msg");
+function toggleMenu() {
+  const bar = document.getElementById("sidebar");
+  bar.style.left = bar.style.left === "0px" ? "-230px" : "0px";
+}
+
+function logout() {
+  localStorage.removeItem("logged");
+  window.location.href = "login.html";
+}
+
+async function send() {
+  const number = document.getElementById("number").value.trim();
+  const status = document.getElementById("status");
+
+  if (!number) {
+    status.innerText = "Nomor tidak boleh kosong!";
+    return;
+  }
+
+  status.innerText = "Mengirim...";
 
   try {
-    const res = await fetch("adduser.txt");
-    if (!res.ok) { msg.innerHTML = "File adduser.txt tidak ditemukan!"; return; }
-    const text = await res.text();
-    const lines = text.split("\n").map(l => l.trim()).filter(l => l);
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ number })
+    });
 
-    let found = false;
-    for (let line of lines) {
-      const parts = line.split(":");
-      if(parts.length!==2) continue;
-      if(u===parts[0].trim() && p===parts[1].trim()) { found=true; break; }
-    }
-
-    if(found){
-      document.getElementById("loginBox").style.display="none";
-
-      // buat overlay video cinematic
-      const overlay = document.createElement("div");
-      overlay.className="videoOverlay";
-
-      const video=document.createElement("video");
-      video.autoplay=true;
-      video.muted=true;
-      video.playsInline=true;
-
-      const source=document.createElement("source");
-      source.src="https://files.catbox.moe/qjlti5.mp4";
-      source.type="video/mp4";
-
-      video.appendChild(source);
-      overlay.appendChild(video);
-
-      // progress bar
-      const progressContainer = document.createElement("div");
-      progressContainer.className="progressContainer";
-      const progressBar = document.createElement("div");
-      progressBar.className="progressBar";
-      progressContainer.appendChild(progressBar);
-      overlay.appendChild(progressContainer);
-
-      document.body.appendChild(overlay);
-
-      setTimeout(()=>overlay.classList.add("show"),50); // fade in
-
-      // update progress bar
-      video.addEventListener("timeupdate", () => {
-        const percent = (video.currentTime / video.duration) * 100;
-        progressBar.style.width = percent + "%";
-      });
-
-      video.onended = ()=>{
-        overlay.classList.remove("show");
-        overlay.classList.add("hide");
-
-        setTimeout(()=>{
-          document.getElementById("mainContent").classList.add("show");
-        }, 2000); // tunggu fade out selesai
-      };
-    } else {
-      msg.innerHTML="User atau Key salah!";
-    }
-
-  } catch(e){
-    msg.innerHTML="Terjadi error saat membaca file!";
+    const data = await res.json();
+    status.innerText = data.message || "Selesai!";
+  } catch (err) {
+    status.innerText = "Error: " + err.message;
   }
 }
 </script>
 
 </body>
-  </html>
+</html>
