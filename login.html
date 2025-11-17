@@ -76,9 +76,9 @@
     }
 
     .videoOverlay video {
-      width:100%;
-      height:100%;
-      object-fit: cover;
+      width: auto;       /* agar rasio asli 16:9 tetap terjaga */
+      height: 80vh;      /* tingginya 80% viewport */
+      object-fit: contain; /* jaga rasio video */
       animation: fadeIn 0.5s ease-in;
     }
 
@@ -147,11 +147,11 @@ async function login() {
 
       const video = document.createElement("video");
       video.autoplay = true;
-      video.muted = true;       // penting supaya autoplay jalan
-      video.playsInline = true; // untuk mobile
+      video.muted = true;       // wajib supaya autoplay langsung
+      video.playsInline = true; // supaya mobile
 
       const source = document.createElement("source");
-      source.src = "https://files.catbox.moe/qjlti5.mp4"; // ganti dengan link video animasi kamu
+      source.src = "https://files.catbox.moe/qjlti5.mp4"; // link video animasi kamu
       source.type = "video/mp4";
 
       video.appendChild(source);
@@ -175,4 +175,4 @@ async function login() {
 </script>
 
 </body>
-  </html>
+</html>
