@@ -3,6 +3,8 @@
 <head>
   <title>Login</title>
   <style>
+
+    /* Background foto fullscreen */
     body {
       margin: 0;
       padding: 0;
@@ -15,7 +17,6 @@
       background-position: center;
       background-repeat: no-repeat;
       background-image: url('https://files.catbox.moe/ocsxya.jpg');
-      overflow: hidden;
     }
 
     .box { 
@@ -25,8 +26,6 @@
       border-radius:10px; 
       box-shadow:0 0 15px rgba(0,0,0,0.5);
       color: #fff;
-      position: relative;
-      z-index: 10; /* pastikan box tetap di atas background */
     }
 
     .title {
@@ -63,101 +62,60 @@
     }
 
     #msg { margin-top:10px; color:#ff0000; text-align:center; }
-
-    /* overlay fullscreen video */
-    .videoOverlay {
-      position: fixed;
-      top:0; left:0;
-      width:100vw; height:100vh;
-      background:black;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      z-index: 999; /* cukup tinggi tapi tidak mengganggu sebelum login */
-      opacity: 0;
-      pointer-events: none; /* mencegah overlay mengganggu klik sebelum login */
-      transition: opacity 2s ease;
-    }
-
-    .videoOverlay.show {
-      opacity: 1;
-      pointer-events: auto; /* aktifkan saat video muncul */
-    }
-
-    .videoOverlay.hide {
-      opacity: 0;
-    }
-
-    /* video portrait 9:16 */
-    .videoOverlay video {
-      width: auto;
-      height: 90vh;
-      object-fit: contain;
-    }
   </style>
 </head>
 <body>
 
-<div class="box" id="loginBox">
+<div class="box">
+
   <h2 class="title">Masukan user & key untuk Mengakses</h2>
 
   <input id="user" type="text" placeholder="Username">
   <input id="pass" type="password" placeholder="Password">
 
   <button onclick="login()">LOGIN</button>
+
   <p id="msg"></p>
 </div>
 
-<!-- Video overlay tetap ada di DOM tapi tersembunyi -->
-<div class="videoOverlay" id="videoOverlay">
-  <video id="loginVideo" autoplay muted playsinline>
-    <source src=https://files.catbox.moe/0629kh.mp4" type="video/mp4">
-  </video>
-</div>
-
+<!-- SCRIPT LOGIN DITARUH PALING BAWAH -->
 <script>
 async function login() {
+
   let u = document.getElementById("user").value.trim();
   let p = document.getElementById("pass").value.trim();
   let msg = document.getElementById("msg");
 
   try {
     const res = await fetch("adduser.txt");
-    if (!res.ok) { msg.innerHTML = "File adduser.txt tidak ditemukan!"; return; }
+
+    if (!res.ok) {
+      msg.innerHTML = "File adduser.txt tidak ditemukan!";
+      return;
+    }
 
     const text = await res.text();
     const lines = text.split("\n").map(l => l.trim()).filter(l => l);
+
     let found = false;
 
     for (let line of lines) {
+
       const parts = line.split(":");
       if (parts.length !== 2) continue;
-      if (u === parts[0].trim() && p === parts[1].trim()) {
+
+      const user = parts[0].trim();
+      const key  = parts[1].trim();
+
+      if (u === user && p === key) {
         found = true;
         break;
       }
     }
 
     if (found) {
-      // sembunyikan login box
-      document.getElementById("loginBox").style.display = "none";
-
-      // tampilkan video overlay
-      const overlay = document.getElementById("videoOverlay");
-      overlay.classList.add("show");
-
-      const video = document.getElementById("loginVideo");
-
-      video.onended = () => {
-        overlay.classList.remove("show");
-        overlay.classList.add("hide");
-
-        setTimeout(() => {
-          localStorage.setItem("logged","yes");
-          window.location.href = "index.html?fadein=1";
-        }, 2000); // tunggu fade out
-      };
-
+      localStorage.setItem("logged", "yes");
+      window.location.href = "index.html";
     } else {
       msg.innerHTML = "User atau Key salah!";
     }
