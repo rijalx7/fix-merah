@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Fix Merah Web</title>
 
-  <!-- Cek login -->
   <script>
     if (localStorage.getItem("logged") !== "yes") {
       window.location.href = "login.html";
@@ -28,13 +27,151 @@
       overflow: hidden;
     }
 
-    /* HAMBURGER */
+    /* HAMBURGER BUTTON */
     .menu-btn {
       position: fixed;
       top: 15px;
       left: 15px;
       font-size: 28px;
       color: white;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -230px;
+      width: 230px;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      padding-top: 60px;
+      transition: 0.3s;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .sidebar a:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .box {
+      background: rgba(0,0,0,0.55);
+      padding: 25px;
+      width: 330px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+      color: #fff;
+      text-align: center;
+    }
+
+    .title {
+      color: rgba(255,255,255,0.85);
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      margin-top: 10px;
+      border-radius: 5px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ffffff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 5px;
+    }
+
+    #status {
+      margin-top: 15px;
+      color: #ff4444;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- GARIS TIGA -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <a href="https://t.me/username" target="_blank">Telegram</a>
+  <a href="https://wa.me/62xxxxxxx" target="_blank">Support</a>
+  <a href="#" onclick="logout()">Logout</a>
+</div>
+
+<div class="box">
+  <div class="title">Fix Merah V2.0</div>
+
+  <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
+  <input id="number" type="text" placeholder="Example +79xxx" required />
+
+  <button onclick="send()">Fix</button>
+
+  <p id="status"></p>
+</div>
+
+<script>
+function toggleMenu() {
+  const bar = document.getElementById("sidebar");
+  bar.style.left = bar.style.left === "0px" ? "-230px" : "0px";
+}
+
+function logout() {
+  localStorage.removeItem("logged");
+  window.location.href = "login.html";
+}
+
+async function send() {
+  const number = document.getElementById("number").value.trim();
+  const status = document.getElementById("status");
+
+  if (!number) {
+    status.innerText = "Nomor tidak boleh kosong";
+    return;
+  }
+
+  status.innerText = "Mengirim...";
+
+  try {
+    const res = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ number })
+    });
+
+    const data = await res.json();
+    status.innerText = data.message || "Selesai";
+  } catch (err) {
+    status.innerText = "Gagal: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>      color: white;
       background: rgba(0,0,0,0.4);
       padding: 8px 12px;
       border-radius: 6px;
