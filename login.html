@@ -1,73 +1,72 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login Fix Merah</title>
-  <style>
-    body {
-      font-family: Arial;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: url("https://files.catbox.moe/i9t5rg.jpg") no-repeat center center/cover;
-      margin: 0;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login Fix Merah</title>
+<style>
+  body {
+    font-family: Arial;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url("https://files.catbox.moe/i9t5rg.jpg") no-repeat center center/cover;
+    margin: 0;
+  }
 
-    .box {
-      background: rgba(0,0,0,0.6);
-      padding: 30px;
-      border-radius: 10px;
-      color: #fff;
-      text-align: center;
-      width: 300px;
-    }
+  .box {
+    background: rgba(0,0,0,0.6);
+    padding: 30px;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    width: 300px;
+  }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: none;
-      outline: none;
-    }
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+  }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #fff;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
-    #animation {
-      display: none;
-      position: fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:black;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      z-index: 9999;
-    }
+  #error {
+    color: #ff4444;
+    margin-top: 10px;
+  }
 
-    #animation video {
-      width: 50%;
-      border-radius: 10px;
-    }
+  /* overlay fullscreen untuk video */
+  #videoOverlay {
+    position: fixed;
+    top:0; left:0;
+    width:100vw; height:100vh;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index: 9999;
+  }
 
-    #error {
-      color: #ff4444;
-      margin-top: 10px;
-    }
-  </style>
+  #videoOverlay video {
+    width: 80%;  /* bisa disesuaikan */
+    height: auto;
+    border-radius: 10px;
+  }
+</style>
 </head>
 <body>
 
@@ -79,35 +78,37 @@
   <p id="error"></p>
 </div>
 
-<!-- Animasi setelah login sukses -->
-<div id="animation">
-  <!-- Pakai video URL langsung di sini -->
-  <video autoplay>
-    <source src="https://files.catbox.moe/qjlti5.mp4" type="video/mp4">
-  </video>
-</div>
-
 <script>
 function login() {
   const user = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
   const error = document.getElementById("error");
 
-  // Validasi sederhana
   if (user === "admin" && pass === "123") {
     // sembunyikan login box
     document.getElementById("loginBox").style.display = "none";
 
-    // tampilkan animasi
-    const anim = document.getElementById("animation");
-    anim.style.display = "flex";
+    // buat overlay video
+    const overlay = document.createElement("div");
+    overlay.id = "videoOverlay";
 
-    // redirect otomatis setelah video selesai
-    const video = anim.querySelector("video");
+    const video = document.createElement("video");
+    video.autoplay = true;
+
+    const source = document.createElement("source");
+    source.src = "https://files.catbox.moe/qjlti5.mp4"; // ganti dengan link video animasi
+    source.type = "video/mp4";
+
+    video.appendChild(source);
+    overlay.appendChild(video);
+    document.body.appendChild(overlay);
+
+    // setelah video selesai → redirect
     video.onended = () => {
-      localStorage.setItem("logged", "yes"); // tandai login sukses
+      localStorage.setItem("logged", "yes");
       window.location.href = "index.html";
     };
+
   } else {
     error.innerText = "Username atau password salah!";
   }
