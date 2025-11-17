@@ -1,120 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>Login</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Fix Merah</title>
   <style>
-
     body {
-      margin: 0;
-      padding: 0;
       font-family: Arial;
-      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-image: url('https://files.catbox.moe/ocsxya.jpg');
+      height: 100vh;
+      background: url("https://files.catbox.moe/i9t5rg.jpg") no-repeat center center/cover;
+      margin: 0;
     }
 
-    .box { 
-      width: 300px; 
-      padding: 25px; 
+    .box {
       background: rgba(0,0,0,0.6);
-      border-radius:10px; 
-      box-shadow:0 0 15px rgba(0,0,0,0.7);
+      padding: 30px;
+      border-radius: 10px;
       color: #fff;
+      text-align: center;
+      width: 300px;
     }
 
-    .title {
-      text-align:center;
-      color: rgba(255,255,255,0.9);
-      font-weight:bold;
-      font-size: 20px;
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+      outline: none;
     }
 
-    input { 
-      width:100%; 
-      padding:10px; 
-      margin-top:10px; 
-      border:none; 
-      outline:none; 
-      border-radius:5px;
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #fff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
 
-    button { 
-      width:100%; 
-      padding:10px; 
-      margin-top:20px; 
-      border:none; 
-      background:#ffffff;
-      color:#000; 
-      font-weight:bold; 
-      cursor:pointer; 
-      border-radius:5px;
+    #animation {
+      display: none;
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:black;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index: 9999;
     }
 
-    #msg { margin-top:10px; color:#ff0000; text-align:center; }
+    #animation video {
+      width: 50%;
+      border-radius: 10px;
+    }
+
+    #error {
+      color: #ff4444;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
 
-<div class="box">
+<div class="box" id="loginBox">
+  <h2>Login Fix Merah</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p id="error"></p>
+</div>
 
-  <h2 class="title">Masukan Username & Key</h2>
-
-  <input id="user" type="text" placeholder="Username">
-  <input id="pass" type="password" placeholder="Key">
-
-  <button onclick="login()">LOGIN</button>
-
-  <p id="msg"></p>
+<!-- Animasi setelah login sukses -->
+<div id="animation">
+  <!-- Pakai video URL langsung di sini -->
+  <video autoplay>
+    <source src="https://files.catbox.moe/qjlti5.mp4" type="video/mp4">
+  </video>
 </div>
 
 <script>
-async function login() {
+function login() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+  const error = document.getElementById("error");
 
-  let u = document.getElementById("user").value.trim();
-  let p = document.getElementById("pass").value.trim();
-  let msg = document.getElementById("msg");
+  // Validasi sederhana
+  if (user === "admin" && pass === "123") {
+    // sembunyikan login box
+    document.getElementById("loginBox").style.display = "none";
 
-  try {
-    const res = await fetch("adduser.txt");
+    // tampilkan animasi
+    const anim = document.getElementById("animation");
+    anim.style.display = "flex";
 
-    if (!res.ok) {
-      msg.innerHTML = "File adduser.txt tidak ditemukan!";
-      return;
-    }
-
-    const text = await res.text();
-    const lines = text.split("\n").map(l => l.trim()).filter(l => l);
-
-    let found = false;
-
-    for (let line of lines) {
-
-      const parts = line.split(":");
-      if (parts.length !== 2) continue;
-
-      const user = parts[0].trim();
-      const key  = parts[1].trim();
-
-      if (u === user && p === key) {
-        found = true;
-        break;
-      }
-    }
-
-    if (found) {
-      localStorage.setItem("logged", "yes");
+    // redirect otomatis setelah video selesai
+    const video = anim.querySelector("video");
+    video.onended = () => {
+      localStorage.setItem("logged", "yes"); // tandai login sukses
       window.location.href = "index.html";
-    } else {
-      msg.innerHTML = "User atau Key salah!";
-    }
-
-  } catch (e) {
-    msg.innerHTML = "Terjadi error saat membaca file!";
+    };
+  } else {
+    error.innerText = "Username atau password salah!";
   }
 }
 </script>
