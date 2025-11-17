@@ -1,39 +1,133 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Login Fix Merah</title>
-
+  <title>Login</title>
   <style>
+
+    /* Background foto fullscreen */
     body {
       margin: 0;
       padding: 0;
+      font-family: Arial;
       height: 100vh;
-      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       background-size: cover;
       background-position: center;
-      background-image: url("https://files.catbox.moe/i9t5rg.jpg");
+      background-repeat: no-repeat;
+      background-image: url('https://files.catbox.moe/ocsxya.jpg');
     }
 
-    .box {
-      background: rgba(0,0,0,0.6);
-      padding: 25px;
-      width: 300px;
-      border-radius: 10px;
-      color: white;
-      text-align: center;
+    .box { 
+      width: 300px; 
+      padding: 25px; 
+      background: rgba(0,0,0,0.5);
+      border-radius:10px; 
+      box-shadow:0 0 15px rgba(0,0,0,0.5);
+      color: #fff;
     }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 12px;
-      border-radius: 5px;
-      border: none;
+    .title {
+      text-align:center;
+      color: rgba(255,255,255,0.8);
+      font-weight:bold;
+      font-size: 20px;
+      text-shadow:
+        -1px -1px 0 rgba(0,0,0,0.5),
+         1px -1px 0 rgba(0,0,0,0.5),
+        -1px  1px 0 rgba(0,0,0,0.5),
+         1px  1px 0 rgba(0,0,0,0.5);
+    }
+
+    input { 
+      width:100%; 
+      padding:10px; 
+      margin-top:10px; 
+      border:none; 
+      outline:none; 
+      border-radius:5px;
+    }
+
+    button { 
+      width:100%; 
+      padding:10px; 
+      margin-top:20px; 
+      border:none; 
+      background:#ffffff;
+      color:#000; 
+      font-weight:bold; 
+      cursor:pointer; 
+      border-radius:5px;
+    }
+
+    #msg { margin-top:10px; color:#ff0000; text-align:center; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+
+  <h2 class="title">Masukan user & key untuk Mengakses</h2>
+
+  <input id="user" type="text" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+
+  <button onclick="login()">LOGIN</button>
+
+  <p id="msg"></p>
+</div>
+
+<!-- SCRIPT LOGIN DITARUH PALING BAWAH -->
+<script>
+async function login() {
+
+  let u = document.getElementById("user").value.trim();
+  let p = document.getElementById("pass").value.trim();
+  let msg = document.getElementById("msg");
+
+  try {
+    const res = await fetch("adduser.txt");
+
+    if (!res.ok) {
+      msg.innerHTML = "File adduser.txt tidak ditemukan!";
+      return;
+    }
+
+    const text = await res.text();
+    const lines = text.split("\n").map(l => l.trim()).filter(l => l);
+
+    let found = false;
+
+    for (let line of lines) {
+
+      const parts = line.split(":");
+      if (parts.length !== 2) continue;
+
+      const user = parts[0].trim();
+      const key  = parts[1].trim();
+
+      if (u === user && p === key) {
+        found = true;
+        break;
+      }
+    }
+
+    if (found) {
+      localStorage.setItem("logged", "yes");
+      window.location.href = "index.html";
+    } else {
+      msg.innerHTML = "User atau Key salah!";
+    }
+
+  } catch (e) {
+    msg.innerHTML = "Terjadi error saat membaca file!";
+  }
+}
+</script>
+
+</body>
+</html>
       outline: none;
     }
 
