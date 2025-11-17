@@ -2,14 +2,8 @@
 <html lang="id">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Fix Merah Web</title>
-
-  <script>
-    if (localStorage.getItem("logged") !== "yes") {
-      window.location.href = "login.html";
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login Fix Merah</title>
 
   <style>
     body {
@@ -23,261 +17,70 @@
       background-size: cover;
       background-position: center;
       background-image: url("https://files.catbox.moe/i9t5rg.jpg");
-      overflow: hidden;
     }
 
-    /* ===== HAMBURGER ===== */
-    .hamburger {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      font-size: 30px;
-      color: white;
-      cursor: pointer;
-      z-index: 20;
-      text-shadow: 0 0 5px black;
-    }
-
-    /* ===== SIDEBAR ===== */
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -260px;
-      width: 250px;
-      height: 100%;
-      background: rgba(0,0,0,0.88);
-      padding: 20px;
-      transition: 0.3s;
-      z-index: 15;
-    }
-
-    .sidebar h3 {
-      color: white;
-      margin-bottom: 20px;
-      text-align: center;
-      font-size: 20px;
-    }
-
-    .sidebar button, 
-    .sidebar a {
-      width: 100%;
-      display: block;
-      margin-top: 10px;
-      padding: 10px;
-      text-align: center;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      background: white;
-      color: black;
-    }
-
-    /* ===== ORIGINAL CONTENT ===== */
     .box {
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.6);
       padding: 25px;
-      width: 330px;
+      width: 300px;
       border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      color: #fff;
+      color: white;
       text-align: center;
-    }
-
-    .title {
-      color: rgba(255,255,255,0.85);
-      font-size: 22px;
-      font-weight: bold;
-      margin-bottom: 20px;
     }
 
     input {
       width: 100%;
       padding: 10px;
-      border: none;
-      margin-top: 10px;
+      margin-top: 12px;
       border-radius: 5px;
+      border: none;
       outline: none;
     }
 
     button {
       width: 100%;
       padding: 12px;
-      background: #ffffff;
-      color: #000;
+      margin-top: 20px;
+      background: white;
+      color: black;
       font-weight: bold;
+      border-radius: 5px;
       border: none;
       cursor: pointer;
-      margin-top: 20px;
-      border-radius: 5px;
     }
 
     #status {
-      margin-top: 15px;
-      color: #ff4444;
+      margin-top: 10px;
+      color: red;
     }
   </style>
 </head>
 
 <body>
 
-<!-- HAMBURGER / GARIS TIGA -->
-<div class="hamburger" onclick="toggleSidebar()">&#9776;</div>
-
-<!-- SIDEBAR MENU -->
-<div id="sidebar" class="sidebar">
-  <h3>Menu</h3>
-
-  <a href="index.html">Home</a>
-
-  <!-- TELEGRAM BUTTON -->
-  <a href="https://t.me/USERNAME_KAMU" target="_blank">Telegram</a>
-
-  <!-- SUPPORT BUTTON -->
-  <a href="https://support.link-kamu" target="_blank">Support</a>
-
-  <!-- LOGOUT -->
-  <button onclick="logout()">Logout</button>
-</div>
-
 <div class="box">
-  <div class="title">Fix Merah V2.0</div>
-
-  <label style="color:rgba(255,255,255,0.8)">© RijalJunior</label>
-  <input id="number" type="text" placeholder="Example +79xxx" required />
-
-  <button onclick="send()">Fix</button>
-
+  <h2>Login</h2>
+  <input id="key" type="password" placeholder="Masukkan Key">
+  <button onclick="login()">Masuk</button>
   <p id="status"></p>
 </div>
 
 <script>
-function toggleSidebar() {
-  const sb = document.getElementById("sidebar");
-  sb.style.left = sb.style.left === "0px" ? "-260px" : "0px";
-}
-
-function logout() {
-  localStorage.removeItem("logged");
-  window.location.href = "login.html";
-}
-
-async function send() {
-  const number = document.getElementById("number").value.trim();
+function login() {
+  const key = document.getElementById("key").value;
   const status = document.getElementById("status");
 
-  if (!number) {
-    status.innerText = "Nomor tidak boleh kosong";
+  if (key === "") {
+    status.innerText = "Key tidak boleh kosong!";
     return;
   }
 
-  status.innerText = "Mengirim...";
-
-  try {
-    const res = await fetch("/api/send", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ number })
-    });
-
-    const data = await res.json();
-    status.innerText = data.message || "Selesai";
-  } catch (err) {
-    status.innerText = "Gagal: " + err.message;
-  }
-}
-</script>
-
-</body>
-</html>        -1px -1px 0 rgba(0,0,0,0.5),
-         1px -1px 0 rgba(0,0,0,0.5),
-        -1px  1px 0 rgba(0,0,0,0.5),
-         1px  1px 0 rgba(0,0,0,0.5);
-    }
-
-    input { 
-      width:100%; 
-      padding:10px; 
-      margin-top:10px; 
-      border:none; 
-      outline:none; 
-      border-radius:5px;
-    }
-
-    button { 
-      width:100%; 
-      padding:10px; 
-      margin-top:20px; 
-      border:none; 
-      background:#ffffff;
-      color:#000; 
-      font-weight:bold; 
-      cursor:pointer; 
-      border-radius:5px;
-    }
-
-    #msg { margin-top:10px; color:#ff0000; text-align:center; }
-  </style>
-</head>
-<body>
-
-<div class="box">
-
-  <h2 class="title">Masukan user & key untuk Mengakses</h2>
-
-  <input id="user" type="text" placeholder="Username">
-  <input id="pass" type="password" placeholder="Password">
-
-  <button onclick="login()">LOGIN</button>
-
-  <p id="msg"></p>
-</div>
-
-<!-- SCRIPT LOGIN DITARUH PALING BAWAH -->
-<script>
-async function login() {
-
-  let u = document.getElementById("user").value.trim();
-  let p = document.getElementById("pass").value.trim();
-  let msg = document.getElementById("msg");
-
-  try {
-    const res = await fetch("adduser.txt");
-
-    if (!res.ok) {
-      msg.innerHTML = "File adduser.txt tidak ditemukan!";
-      return;
-    }
-
-    const text = await res.text();
-    const lines = text.split("\n").map(l => l.trim()).filter(l => l);
-
-    let found = false;
-
-    for (let line of lines) {
-
-      const parts = line.split(":");
-      if (parts.length !== 2) continue;
-
-      const user = parts[0].trim();
-      const key  = parts[1].trim();
-
-      if (u === user && p === key) {
-        found = true;
-        break;
-      }
-    }
-
-    if (found) {
-      localStorage.setItem("logged", "yes");
-      window.location.href = "index.html";
-    } else {
-      msg.innerHTML = "User atau Key salah!";
-    }
-
-  } catch (e) {
-    msg.innerHTML = "Terjadi error saat membaca file!";
+  // GANTI DENGAN KEY PUNYA KAMU
+  if (key === "admin123") {
+    localStorage.setItem("logged", "yes");
+    window.location.href = "fix.html"; // halaman fix kamu
+  } else {
+    status.innerText = "Key salah!";
   }
 }
 </script>
