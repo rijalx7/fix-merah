@@ -3,8 +3,6 @@
 <head>
   <title>Login</title>
   <style>
-
-    /* Background foto fullscreen */
     body {
       margin: 0;
       padding: 0;
@@ -73,18 +71,23 @@
       justify-content:center;
       align-items:center;
       z-index: 9999;
+      opacity: 0;
+      transition: opacity 2s ease;
     }
 
+    .videoOverlay.show {
+      opacity: 1;
+    }
+
+    .videoOverlay.hide {
+      opacity: 0;
+    }
+
+    /* video portrait 9:16 */
     .videoOverlay video {
-      width: auto;       /* agar rasio asli 16:9 tetap terjaga */
-      height: 80vh;      /* tingginya 80% viewport */
-      object-fit: contain; /* jaga rasio video */
-      animation: fadeIn 0.5s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from { opacity:0; }
-      to { opacity:1; }
+      width: auto;
+      height: 90vh; /* tinggi 90% layar */
+      object-fit: contain;
     }
 
   </style>
@@ -92,7 +95,6 @@
 <body>
 
 <div class="box">
-
   <h2 class="title">Masukan user & key untuk Mengakses</h2>
 
   <input id="user" type="text" placeholder="Username">
@@ -105,63 +107,55 @@
 
 <script>
 async function login() {
-
   let u = document.getElementById("user").value.trim();
   let p = document.getElementById("pass").value.trim();
   let msg = document.getElementById("msg");
 
   try {
     const res = await fetch("adduser.txt");
-
-    if (!res.ok) {
-      msg.innerHTML = "File adduser.txt tidak ditemukan!";
-      return;
-    }
+    if (!res.ok) { msg.innerHTML = "File adduser.txt tidak ditemukan!"; return; }
 
     const text = await res.text();
     const lines = text.split("\n").map(l => l.trim()).filter(l => l);
-
     let found = false;
 
     for (let line of lines) {
-
       const parts = line.split(":");
       if (parts.length !== 2) continue;
-
-      const user = parts[0].trim();
-      const key  = parts[1].trim();
-
-      if (u === user && p === key) {
+      if (u === parts[0].trim() && p === parts[1].trim()) {
         found = true;
         break;
       }
     }
 
     if (found) {
-      // hide login box
       document.querySelector(".box").style.display = "none";
 
-      // buat overlay video baru
       const overlay = document.createElement("div");
       overlay.className = "videoOverlay";
 
       const video = document.createElement("video");
       video.autoplay = true;
-      video.muted = true;       // wajib supaya autoplay langsung
-      video.playsInline = true; // supaya mobile
+      video.muted = true;
+      video.playsInline = true;
 
       const source = document.createElement("source");
-      source.src = "https://files.catbox.moe/qjlti5.mp4"; // link video animasi kamu
+      source.src = "https://files.catbox.moe/qjlti5.mp4"; // ganti dengan video portrait kamu
       source.type = "video/mp4";
 
       video.appendChild(source);
       overlay.appendChild(video);
       document.body.appendChild(overlay);
 
-      // redirect setelah video selesai
+      setTimeout(() => overlay.classList.add("show"), 50);
+
       video.onended = () => {
-        localStorage.setItem("logged","yes");
-        window.location.href = "index.html";
+        overlay.classList.remove("show");
+        overlay.classList.add("hide");
+        setTimeout(() => {
+          localStorage.setItem("logged","yes");
+          window.location.href = "index.html";
+        }, 2000);
       };
 
     } else {
